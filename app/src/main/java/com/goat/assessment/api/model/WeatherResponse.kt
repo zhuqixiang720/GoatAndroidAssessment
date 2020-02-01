@@ -10,13 +10,10 @@ import androidx.annotation.Keep
  *      "latitude":37.8267,
  *      "longitude":-122.4233,
  *      "timezone":"America/Los_Angeles",
+ *      "offset":-8
  *      "currently":{  },
- *      "minutely":{  },
  *      "hourly":{  },
  *      "daily":{  },
- *      "alerts":[  ],
- *      "flags":{  },
- *      "offset":-8
  *  }
  * ```
  */
@@ -25,5 +22,8 @@ class WeatherResponse(
     val latitude: Double,
     val longitude: Double,
     val timezone: String,
-    val offset: Int
+    val offset: Int,
+    val currently: WeatherInfoDataResponse,
+    val hourly: WeatherInfoResponse,
+    val daily: WeatherInfoResponse
 )

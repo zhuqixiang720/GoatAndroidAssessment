@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 private const val HTTP_CONNECT_TIMEOUT = 10L
-private const val WEB_BASE_URL = ""
+private const val WEB_BASE_URL = "https://api.darksky.net/forecast/"
+private const val SERVICE_PRIVATE_KEY = "f684566a44fddcaf5711b04c3fc004dd"
 
 @Module
 class NetworkModule {
@@ -38,8 +39,9 @@ class NetworkModule {
     @Provides
     @Singleton
     internal fun provideUserServiceApi(client: OkHttpClient): ServiceApi {
+        val serviceUrl = WEB_BASE_URL.plus(SERVICE_PRIVATE_KEY)
         val retrofit = Retrofit.Builder()
-            .baseUrl(WEB_BASE_URL)
+            .baseUrl(serviceUrl)
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(GsonConverterFactory.create())

@@ -1,0 +1,21 @@
+{
+  "time":1580565475,
+  "summary":"Clear",
+  "icon":"clear-night",
+  "nearestStormDistance":5,
+  "nearestStormBearing":347,
+  "precipIntensity":0,
+  "precipProbability":0,
+  "temperature":49.61,
+  "apparentTemperature":48.19,
+  "dewPoint":46.7,
+  "humidity":0.9,
+  "pressure":1026.6,
+  "windSpeed":4.36,
+  "windGust":7.72,
+  "windBearing":21,
+  "cloudCover":0.21,
+  "uvIndex":0,
+  "visibility":10,
+  "ozone":304
+}
