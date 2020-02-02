@@ -2,8 +2,8 @@ package com.goat.assessment.di
 
 import android.app.Application
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.wifi.WifiManager
+import android.content.res.Resources
+import android.location.LocationManager
 import dagger.Module
 import dagger.Provides
 
@@ -15,12 +15,14 @@ class AppModule {
     }
 
     @Provides
-    fun provideWifiManager(app: Application): WifiManager {
-        return app.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    internal fun provideResources(context: Context): Resources {
+        return context.resources
     }
 
     @Provides
-    fun provideConnectivityManager(app: Application): ConnectivityManager {
-        return app.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    fun provideLocationManager(app: Application): LocationManager {
+        return app.applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
+
+
 }

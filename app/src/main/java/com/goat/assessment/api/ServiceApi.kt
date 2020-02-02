@@ -6,8 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ServiceApi {
-    @GET("/{latitude},{longitude}?exclude=minutely,alerts,flags")
-    fun getWeatherForcast(
+    @GET("{latitude},{longitude}?exclude=minutely,alerts,flags")
+    fun getWeatherForecast(
         @Path("latitude") latitude: Double,
         @Path("longitude") longitude: Double
     ): Single<WeatherResponse>

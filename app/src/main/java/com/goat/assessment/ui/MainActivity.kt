@@ -1,8 +1,9 @@
-package com.goat.assessment
+package com.goat.assessment.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.goat.assessment.R
 import com.goat.assessment.ui.main.MainFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
