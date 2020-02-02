@@ -32,10 +32,10 @@ ext {
     // --------------------------------------------------
     appCompatVersion = '1.1.0' // https://developer.android.com/jetpack/androidx/releases/appcompat
     constraintLayoutVersion = '1.1.3' // https://developer.android.com/jetpack/androidx/releases/constraintlayout
+    swipeRefreshLayoutVersion = '1.0.0' // https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout
     lifecycleVersion = '2.2.0' // https://developer.android.com/jetpack/androidx/releases/lifecycle
     coreKtxVersion = '1.1.0' // https://developer.android.com/kotlin/ktx
     androidMaterialVersion = '1.2.0-alpha04' // https://github.com/material-components/material-components-android/releases
-    swipeRefreshVersion = '1.1.0-alpha03' // https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout
 
     // 3rd party library dependencies
     // --------------------------------------------------

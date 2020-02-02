@@ -10,13 +10,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.goat.assessment.R
+import com.goat.assessment.databinding.MainFragmentBinding
 import com.goat.assessment.di.Injectable
 import com.goat.assessment.service.ServiceRepository
+import com.goat.assessment.ui.details.DetailsFragment
+import com.goat.assessment.utils.observeNonNull
 import javax.inject.Inject
 
 private const val LOCATION_UPDATE_INTERVAL_MS = 30000L
@@ -38,6 +42,7 @@ class MainFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
 
     private lateinit var viewModel: MainViewModel
 
@@ -63,12 +68,34 @@ class MainFragment : Fragment(), Injectable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        viewModel = ViewModelProvider(this, viewModelFactory).get()
+
+        val binding = MainFragmentBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            vm = viewModel
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            Log.d(LOG_TAG, "Refresh the current weather")
+            viewModel.fetchWeatherForecast(getCurrentLocation())
+        }
+
+        viewModel.serviceError.observeNonNull(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.detailsPageEvent.observeNonNull(viewLifecycleOwner) {
+            navigateToDetails()
+        }
+
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get()
+    private fun navigateToDetails() {
+        if (viewModel.weatherHourlyInfo == null) {
+            Toast.makeText(requireContext(), "Weather Hourly Data is not available", Toast.LENGTH_SHORT).show()
+        } else {
+           // TODO: navigate to next fragment
+        }
     }
 
     override fun onStart() {

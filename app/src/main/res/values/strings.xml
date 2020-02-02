@@ -1,6 +1,18 @@
 <resources>
-    <string name="app_name">GoatAssessment</string>
+    <string name="app_name">Goat Assessment</string>
     <string name="city_los_angeles">Los Angeles, CA, USA</string>
     <string name="city_current_location">Current Location</string>
+    <string name="weather_icon_description">Weather Icon</string>
+    <string name="temp_description">Current Temperature: %s</string>
+    <string name="apparent_temp_description">Apparent Temperature: %s</string>
+    <string name="weather_clear">Clear</string>
+    <string name="weather_cloudy">Cloudy</string>
+    <string name="weather_partly_cloudy">Partly Cloudy</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_fog">Fog</string>
+    <string name="weather_wind">Wind</string>
+    <string name="weather_other">Other</string>
+    <string name="button_details">Details</string>
 
 </resources>

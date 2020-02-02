@@ -1,5 +1,6 @@
 package com.goat.assessment.di.fragment
 
+import com.goat.assessment.ui.details.DetailsFragment
 import com.goat.assessment.ui.main.MainFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -11,4 +12,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentBindingModule {
     @ContributesAndroidInjector
     abstract fun contributeMainFragment(): MainFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeDetailsFragment(): DetailsFragment
 }

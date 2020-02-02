@@ -2,6 +2,7 @@ package com.goat.assessment.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.goat.assessment.ui.details.DetailsViewModel
 import com.goat.assessment.ui.main.MainViewModel
 import dagger.Binds
 import dagger.Module
@@ -16,4 +17,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailsViewModel::class)
+    abstract fun bindDetailsViewModel(viewModel: DetailsViewModel): ViewModel
 }

@@ -1,6 +1,8 @@
 package com.goat.assessment.api.model
 
+import android.os.Parcelable
 import androidx.annotation.Keep
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Weather response.
@@ -18,6 +20,7 @@ import androidx.annotation.Keep
  * ```
  */
 @Keep
+@Parcelize
 class WeatherResponse(
     val latitude: Double,
     val longitude: Double,
@@ -26,4 +29,4 @@ class WeatherResponse(
     val currently: WeatherInfoDataResponse,
     val hourly: WeatherInfoResponse,
     val daily: WeatherInfoResponse
-)
+) : Parcelable
