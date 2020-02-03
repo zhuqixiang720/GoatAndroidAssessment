@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Goat Assessment</string>
+    <string name="main_fragment_label">Main Screen</string>
+    <string name="details_fragment_label">Details Screen</string>
     <string name="city_los_angeles">Los Angeles, CA, USA</string>
     <string name="city_current_location">Current Location</string>
     <string name="weather_icon_description">Weather Icon</string>
     <string name="temp_description">Current Temperature: %s</string>
     <string name="apparent_temp_description">Apparent Temperature: %s</string>
+    <string name="next_24_hours">Next 24 Hours</string>
+    <string name="high_low_temp">High: %s Low: %s</string>
     <string name="weather_clear">Clear</string>
     <string name="weather_cloudy">Cloudy</string>
     <string name="weather_partly_cloudy">Partly Cloudy</string>

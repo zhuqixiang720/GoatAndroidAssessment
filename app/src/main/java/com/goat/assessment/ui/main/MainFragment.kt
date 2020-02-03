@@ -15,11 +15,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import com.goat.assessment.R
+import androidx.navigation.fragment.findNavController
+import com.goat.assessment.api.model.WeatherResponse
 import com.goat.assessment.databinding.MainFragmentBinding
 import com.goat.assessment.di.Injectable
 import com.goat.assessment.service.ServiceRepository
-import com.goat.assessment.ui.details.DetailsFragment
 import com.goat.assessment.utils.observeNonNull
 import javax.inject.Inject
 
@@ -30,10 +30,6 @@ private val LOG_TAG = MainFragment::class.java.simpleName
 
 class MainFragment : Fragment(), Injectable {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     @Inject
     lateinit var serviceRepository: ServiceRepository
 
@@ -43,8 +39,9 @@ class MainFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-
     private lateinit var viewModel: MainViewModel
+
+    private var weatherInfo: WeatherResponse? = null
 
     private val locationListener = object : LocationListener {
         override fun onProviderDisabled(provider: String?) {
@@ -80,21 +77,27 @@ class MainFragment : Fragment(), Injectable {
             viewModel.fetchWeatherForecast(getCurrentLocation())
         }
 
+        binding.actionButton.setOnClickListener {
+            navigateToDetailsFragment()
+        }
+
+        viewModel.weatherInfo.observeNonNull(viewLifecycleOwner) {
+            weatherInfo = it
+        }
+
         viewModel.serviceError.observeNonNull(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
-        }
-        viewModel.detailsPageEvent.observeNonNull(viewLifecycleOwner) {
-            navigateToDetails()
         }
 
         return binding.root
     }
 
-    private fun navigateToDetails() {
-        if (viewModel.weatherHourlyInfo == null) {
-            Toast.makeText(requireContext(), "Weather Hourly Data is not available", Toast.LENGTH_SHORT).show()
+
+    private fun navigateToDetailsFragment() {
+        if (weatherInfo != null) {
+            findNavController().navigate(MainFragmentDirections.actionToDetailsFragment(weatherInfo!!.hourly))
         } else {
-           // TODO: navigate to next fragment
+            Toast.makeText(requireContext(), "Weather Hourly Data is not available. Please refresh.", Toast.LENGTH_SHORT).show()
         }
     }
 

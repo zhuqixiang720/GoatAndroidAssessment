@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.goat.assessment.ui.main.MainViewModel" />
@@ -58,11 +59,10 @@
 
             <ImageView
                 android:id="@+id/weatherImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginTop="40dp"
                 android:src="@{vm.weatherIcon}"
-                android:tint="@android:color/black"
                 android:contentDescription="@string/weather_icon_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:text="@={vm.weatherText}"
                 app:layout_constraintTop_toBottomOf="@id/weatherImage"
-                app:layout_constraintStart_toStartOf="@id/weatherImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Clear" />
 
             <TextView
@@ -104,6 +105,7 @@
                 tools:text="Apparent Temperature: 20" />
 
             <Button
+                android:id="@+id/action_button"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:background="@drawable/button_selector"
@@ -111,7 +113,6 @@
                 android:textColor="@android:color/white"
                 android:gravity="center"
                 android:enabled="@{!safeUnbox(vm.isLoading)}"
-                android:onClick="@{()-> vm.showDetailsPage()}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

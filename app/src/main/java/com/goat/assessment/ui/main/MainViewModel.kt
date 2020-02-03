@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.goat.assessment.R
 import com.goat.assessment.api.model.WeatherInfoResponse
+import com.goat.assessment.api.model.WeatherResponse
 import com.goat.assessment.service.ServiceRepository
 import com.goat.assessment.ui.WeatherIcon
 import com.goat.assessment.utils.Utils
@@ -41,11 +42,8 @@ class MainViewModel @Inject constructor(
     private val _serviceError = MutableLiveData<Throwable>()
     val serviceError: LiveData<Throwable> = _serviceError
 
-    var weatherHourlyInfo: WeatherInfoResponse? = null
-        private set
-
-    private val _detailsPageEvent = MutableLiveData<Unit>()
-    val detailsPageEvent: LiveData<Unit> = _detailsPageEvent
+    private val _weatherInfo = MutableLiveData<WeatherResponse>()
+    val weatherInfo: LiveData<WeatherResponse> = _weatherInfo
 
     fun fetchWeatherForecast(location: Location?) {
         if (location == null) {
@@ -66,6 +64,12 @@ class MainViewModel @Inject constructor(
         latValue: Double = DEFAULT_LATITUDE,
         lonValue: Double = DEFAULT_LONGITUDE
     ) {
+        if (weatherInfo.value != null &&
+            weatherInfo.value!!.latitude == latValue &&
+            weatherInfo.value!!.longitude == lonValue) {
+            return
+        }
+
         serviceRepository.getWeatherForecast(latValue, lonValue)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -84,16 +88,11 @@ class MainViewModel @Inject constructor(
                 weatherText.set(resources.getString(WeatherIcon.parseWeatherIcon(weather.currently.icon).stringRes))
                 tempText.set(resources.getString(R.string.temp_description, String.format("%.0f", weather.currently.temperature)))
                 apparentTempText.set(resources.getString(R.string.apparent_temp_description, String.format("%.0f", weather.currently.apparentTemperature)))
-                // set the weather hourly info
-                weatherHourlyInfo = weather.hourly
+                _weatherInfo.value = weather
             }, { error ->
                 _serviceError.value = error
             })
             .addTo(compositeDisposable)
-    }
-
-    fun showDetailsPage() {
-        _detailsPageEvent.value = Unit
     }
 
     override fun onCleared() {

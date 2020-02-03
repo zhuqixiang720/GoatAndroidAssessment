@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_fragment"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.goat.assessment.ui.main.MainFragment"
+        android:label="@string/main_fragment_label"
+        tools:layout="@layout/main_fragment">
+
+        <action
+            android:id="@+id/action_to_details_fragment"
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+
+            <argument
+                android:name="hourlyInfo"
+                app:argType="com.goat.assessment.api.model.WeatherInfoResponse"
+                app:nullable="false" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.goat.assessment.ui.details.DetailsFragment"
+        android:label="@string/details_fragment_label"
+        tools:layout="@layout/details_fragment">
+
+        <argument
+            android:name="hourlyInfo"
+            app:argType="com.goat.assessment.api.model.WeatherInfoResponse"
+            app:nullable="false" />
+
+    </fragment>
+
+</navigation>
