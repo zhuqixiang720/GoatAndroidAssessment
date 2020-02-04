@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.goat.assessment.R
-import com.goat.assessment.api.model.WeatherInfoResponse
 import com.goat.assessment.api.model.WeatherResponse
 import com.goat.assessment.service.ServiceRepository
 import com.goat.assessment.ui.WeatherIcon
@@ -22,6 +21,9 @@ import javax.inject.Inject
 
 private const val DEFAULT_LATITUDE = 34.052235
 private const val DEFAULT_LONGITUDE = -118.243683
+
+// make the data expire in 10 minutes
+private const val DATA_EXPIRE_TIME_MS = 600000L
 
 class MainViewModel @Inject constructor(
     private val resources: Resources,
@@ -45,15 +47,15 @@ class MainViewModel @Inject constructor(
     private val _weatherInfo = MutableLiveData<WeatherResponse>()
     val weatherInfo: LiveData<WeatherResponse> = _weatherInfo
 
-    fun fetchWeatherForecast(location: Location?) {
+    fun fetchWeatherForecast(location: Location?, forceRefresh: Boolean) {
         if (location == null) {
             cityText.set(resources.getString(R.string.city_los_angeles))
             locationText.set("$DEFAULT_LATITUDE, $DEFAULT_LONGITUDE")
-            fetchWeatherForecastForLocation()
+            fetchWeatherForecastForLocation(forceRefresh = forceRefresh)
         } else {
             cityText.set(resources.getString(R.string.city_current_location))
             locationText.set("${location.latitude}, ${location.longitude}")
-            fetchWeatherForecastForLocation(location.latitude, location.longitude)
+            fetchWeatherForecastForLocation(location.latitude, location.longitude, forceRefresh)
         }
     }
 
@@ -62,11 +64,16 @@ class MainViewModel @Inject constructor(
      */
     private fun fetchWeatherForecastForLocation(
         latValue: Double = DEFAULT_LATITUDE,
-        lonValue: Double = DEFAULT_LONGITUDE
+        lonValue: Double = DEFAULT_LONGITUDE,
+        forceRefresh: Boolean
     ) {
-        if (weatherInfo.value != null &&
+        isLoading.set(true)
+
+        if (!forceRefresh &&
+            weatherInfo.value != null &&
             weatherInfo.value!!.latitude == latValue &&
-            weatherInfo.value!!.longitude == lonValue) {
+            weatherInfo.value!!.longitude == lonValue &&
+            System.currentTimeMillis() - weatherInfo.value!!.currently.time * 1000 <= DATA_EXPIRE_TIME_MS) {
             isLoading.set(false)
             return
         }
@@ -74,9 +81,6 @@ class MainViewModel @Inject constructor(
         serviceRepository.getWeatherForecast(latValue, lonValue)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                isLoading.set(true)
-            }
             .doOnSuccess {
                 isLoading.set(false)
             }

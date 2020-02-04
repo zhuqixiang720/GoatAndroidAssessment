@@ -23,7 +23,7 @@ import com.goat.assessment.service.ServiceRepository
 import com.goat.assessment.utils.observeNonNull
 import javax.inject.Inject
 
-private const val LOCATION_UPDATE_INTERVAL_MS = 30000L
+private const val LOCATION_UPDATE_INTERVAL_MS = 10000L
 private const val REQUEST_LOCATION_PERMISSION = 10101
 
 private val LOG_TAG = MainFragment::class.java.simpleName
@@ -74,7 +74,14 @@ class MainFragment : Fragment(), Injectable {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             Log.d(LOG_TAG, "Refresh the current weather")
-            viewModel.fetchWeatherForecast(getCurrentLocation())
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                binding.swipeRefreshLayout.isRefreshing = false
+                // Permission is not granted
+                requestForLocationPermission()
+            } else {
+                viewModel.fetchWeatherForecast(getCurrentLocation(), true)
+            }
         }
 
         binding.actionButton.setOnClickListener {
@@ -101,8 +108,8 @@ class MainFragment : Fragment(), Injectable {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -110,7 +117,7 @@ class MainFragment : Fragment(), Injectable {
             requestForLocationPermission()
         } else {
             // Permission is granted, get the current location
-            viewModel.fetchWeatherForecast(getCurrentLocation())
+            viewModel.fetchWeatherForecast(getCurrentLocation(), false)
         }
     }
 
@@ -145,6 +152,7 @@ class MainFragment : Fragment(), Injectable {
 
     override fun onPause() {
         super.onPause()
+
         locationManager.removeUpdates(locationListener)
     }
 
@@ -158,18 +166,19 @@ class MainFragment : Fragment(), Injectable {
 
     private fun getCurrentLocation(): Location? {
         var location: Location? = null
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        }
-        Log.d(LOG_TAG, "Get current location from NetworkProvider = $location")
-        if (location == null) {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            val providers = locationManager.getProviders(true)
+            for (provider in providers) {
+                location = locationManager.getLastKnownLocation(provider)
+                if (location != null) {
+                    break
+                }
             }
         }
-
-        Log.d(LOG_TAG, "Get current location GPSProvider = $location")
-
+        if (location == null) {
+            Toast.makeText(requireContext(), "Cannot get current location", Toast.LENGTH_SHORT).show()
+        }
         return location
     }
 
@@ -192,8 +201,8 @@ class MainFragment : Fragment(), Injectable {
             REQUEST_LOCATION_PERMISSION -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     requestLocationUpdates()
+                    viewModel.fetchWeatherForecast(getCurrentLocation(), false)
                 }
-                viewModel.fetchWeatherForecast(getCurrentLocation())
             }
         }
     }

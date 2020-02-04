@@ -17,7 +17,7 @@ object Utils {
     }
 
     fun getDateHourString(timestamp: Long): String {
-        val sdf =  SimpleDateFormat("h a, yyyy-MM-dd", Locale.US)
+        val sdf =  SimpleDateFormat("h a yyyy-MM-dd", Locale.US)
         val date = java.util.Date(timestamp * 1000)
         return sdf.format(date)
     }
