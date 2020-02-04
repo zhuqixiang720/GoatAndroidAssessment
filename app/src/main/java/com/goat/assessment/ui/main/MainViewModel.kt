@@ -22,8 +22,8 @@ import javax.inject.Inject
 private const val DEFAULT_LATITUDE = 34.052235
 private const val DEFAULT_LONGITUDE = -118.243683
 
-// make the data expire in 10 minutes
-private const val DATA_EXPIRE_TIME_MS = 600000L
+// make the data expire in 1 minutes
+private const val DATA_EXPIRE_TIME_MS = 60000L
 
 class MainViewModel @Inject constructor(
     private val resources: Resources,
