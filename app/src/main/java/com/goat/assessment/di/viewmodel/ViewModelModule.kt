@@ -18,14 +18,4 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(DetailsHourlyHeaderViewModel::class)
-    abstract fun bindDetailsHourlyHeaderViewModel(viewModel: DetailsHourlyHeaderViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(DetailsHourlyItemViewModel::class)
-    abstract fun bindDetailsHourlyItemViewModel(viewModel: DetailsHourlyItemViewModel): ViewModel
 }

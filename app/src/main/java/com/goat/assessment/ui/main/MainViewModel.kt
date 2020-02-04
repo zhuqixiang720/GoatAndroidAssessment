@@ -52,7 +52,7 @@ class MainViewModel @Inject constructor(
             fetchWeatherForecastForLocation()
         } else {
             cityText.set(resources.getString(R.string.city_current_location))
-            locationText.set("${location.latitude} , ${location.longitude}")
+            locationText.set("${location.latitude}, ${location.longitude}")
             fetchWeatherForecastForLocation(location.latitude, location.longitude)
         }
     }
@@ -67,6 +67,7 @@ class MainViewModel @Inject constructor(
         if (weatherInfo.value != null &&
             weatherInfo.value!!.latitude == latValue &&
             weatherInfo.value!!.longitude == lonValue) {
+            isLoading.set(false)
             return
         }
 

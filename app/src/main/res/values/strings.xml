@@ -8,7 +8,9 @@
     <string name="temp_description">Current Temperature: %s</string>
     <string name="apparent_temp_description">Apparent Temperature: %s</string>
     <string name="next_24_hours">Next 24 Hours</string>
-    <string name="high_low_temp">High: %s Low: %s</string>
+    <string name="from_time">from %s</string>
+    <string name="temp_high">High: </string>
+    <string name="temp_low">Low: </string>
     <string name="weather_clear">Clear</string>
     <string name="weather_cloudy">Cloudy</string>
     <string name="weather_partly_cloudy">Partly Cloudy</string>

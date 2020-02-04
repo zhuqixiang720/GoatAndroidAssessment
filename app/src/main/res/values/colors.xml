@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorSurface">#FFFBFA</color>
+    <color name="colorOverlay">#1A222222</color>
+    <color name="colorTint">@android:color/black</color>
 </resources>
